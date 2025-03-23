@@ -1,0 +1,65 @@
+/* Page container */
+.organizations-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Create Organization Button Container */
+  .create-org-button-container {
+    display: flex;
+    justify-content: flex-end; /* Align button to the right */
+    margin-bottom: 20px;
+  }
+  
+  /* Create Organization Button */
+  .create-org-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff; /* Blue */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .create-org-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  /* Table Styling */
+  .organizations-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .organizations-table th,
+  .organizations-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .organizations-table th {
+    background-color: #f4f4f4; /* Light gray background for header */
+    font-weight: bold;
+  }
+  
+  .organizations-table tbody tr:hover {
+    background-color: #f9f9f9; /* Light gray background on row hover */
+  }
+  
+  /* Loading and Error Messages */
+  .loading,
+  .error {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 18px;
+  }
+  
+  .error {
+    color: red;
+  }
+
+  
