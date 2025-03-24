@@ -33,7 +33,7 @@ export const Login = () => {
     try {
      
       
-      const response = await api.post("super-admin/login", data);
+      const response = await api.post("/super-admin/login", data);
   
       console.log("Response:", response); // Debugging: Check the response from the server
   

@@ -1,46 +1,10 @@
-.departments-page {
-    padding: 20px;
-    background-color: #f9f9f9;
-    min-height: 100vh;
-  }
-  
-  /* Button container aligned to the top-right */
-  .create-dept-button-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-  }
-  
-  /* Table styles */
-  .departments-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  
-  /* Table headers */
-  .departments-table th {
-    background-color:  #f4f4f4;
-    text-align: left;
-    padding: 12px;
-  }
-  
-  /* Table rows */
-  .departments-table td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  /* Alternate row colors for better readability */
-  .departments-table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-  /* Hover effect */
-  .departments-table tbody tr:hover {
-    background-color: #e6f7ff;
-  }
-  
+.create-dept-button-container{
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.dep-table{
+  margin: 40px;
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "antd";
+import { Table, Button, Spin, message } from "antd";
 import { CreateOrgDepModal } from "../../components/modals/dep-org-modal/index.jsx";
 import { LogoutButton } from "../../components/buttons/logout/index.jsx";
 import { api } from "../../common/interceptor/index.jsx";
@@ -20,6 +20,7 @@ export const Organizations = () => {
       setOrganizations(response.data);
     } catch (error) {
       console.error("Failed to fetch organizations:", error);
+      message.error("Failed to load organizations.");
     } finally {
       setLoading(false);
     }
@@ -29,46 +30,74 @@ export const Organizations = () => {
     setOrganizations([...organizations, newOrg]);
   };
 
-  if (loading) {
-    return <div className="loading">Loading...</div>;
-  }
+  const columns = [
+    {
+      title: "Organization Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Department",
+      dataIndex: "departments",
+      key: "departments",
+      render: (departments) =>
+        departments?.length > 0
+          ? departments.map((dep) => dep.name).join(", ")
+          : "No departments assigned",
+    },
+    {
+      title: "SuperAdmin",
+      dataIndex: "superAdmins",
+      key: "superAdmins",
+      render: (superAdmins) =>
+        superAdmins?.length > 0
+          ? superAdmins.map((admin) => admin.name).join(", ")
+          : "No superAdmins assigned",
+    },
+    {
+      title: "Users",
+      dataIndex: "users",
+      key: "users",
+      render: (users) =>
+        users?.length > 0 ? users.map((user) => user.name).join(", ") : "No users assigned",
+    },
+  ];
 
   return (
     <>
-    <LogoutButton />
-    <div className="organizations-page">
-      {/* Create Organization Button */}
-      <div className="create-org-button-container">
-        <Button type="primary" onClick={() => setIsModalOpen(true)}>
-          Create Organization
-        </Button>
+      <LogoutButton />
+      <div className="organizations-page">
+        {/* Create Organization Button */}
+        <div className="create-org-button-container">
+          <Button type="primary" onClick={() => setIsModalOpen(true)}>
+            Create Organization
+          </Button>
+        </div>
+
+        {/* Reusable Modal for Creating Organizations */}
+        <CreateOrgDepModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          type="organization"
+          onEntityCreated={handleOrganizationCreated}
+        />
+
+        {/* Ant Design Table */}
+        {loading ? (
+          <div className="loading-container">
+            <Spin size="large" />
+          </div>
+        ) : (
+          <Table
+            dataSource={organizations}
+            columns={columns}
+            rowKey="id"
+            bordered
+            pagination={{ pageSize: 5, position: ["bottomCenter"] }}
+            className="org-table"
+          />
+        )}
       </div>
-
-      {/* Reusable Modal for Creating Organizations */}
-      <CreateOrgDepModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} type="organization" onEntityCreated={handleOrganizationCreated} />
-
-      {/* Table for Organizations */}
-      <table className="organizations-table">
-        <thead>
-          <tr>
-            <th>Organization Name</th>
-            <th>Department</th>
-            <th>SuperAdmin</th>
-            <th>Users</th>
-          </tr>
-        </thead>
-        <tbody>
-          {organizations.map((org) => (
-            <tr key={org.id}>
-              <td>{org.name}</td>
-              <td>{org.departments?.length > 0 ? org.departments?.map((dep) => dep.name).join(", ") : "No departments assigned"}</td>
-              <td>{org.superAdmins?.length > 0 ? org.superAdmins?.map((admin) => admin.name).join(", ") : "No superAdmins assigned"}</td>
-              <td>{org.users?.length > 0 ? org.users.map((user)=>user.name).join(", ") : "No users assigned"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
     </>
   );
 };
