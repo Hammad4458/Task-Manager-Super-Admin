@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Login } from "./pages/login/index";
 import reportWebVitals from "./reportWebVitals";
+import { Navigate} from "react-router-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CookiesProvider } from "react-cookie";
 import { PublicRoute } from "./routes/publicRoutes/index";
@@ -20,6 +21,7 @@ root.render(
       <UserProvider>
         <Routes>
           <Route element={<PublicRoute />}>
+          <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
           </Route>
 
