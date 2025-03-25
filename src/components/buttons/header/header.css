@@ -1,0 +1,27 @@
+.header-container{
+    position: relative;
+    padding: 10px 20px;
+}
+
+.back-button{
+    position: absolute;
+    left:0;
+    margin-left: 20px;
+    color: white;
+    background-color: green;
+
+}
+
+.back-button:hover{
+    background-color: rgb(1, 81, 1) !important;
+}
+
+.logout-button{
+    position: absolute;
+    right: 0;
+    margin-right: 20px;
+}
+
+.logout-button:hover{
+    background-color: red !important;
+}

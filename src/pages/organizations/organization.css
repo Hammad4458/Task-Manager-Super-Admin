@@ -1,7 +1,14 @@
+.organizations-page{
+  margin-top: 40px;
+  text-align: center;
+  color: green;
+}
 .create-org-button-container{
   display: flex;
   justify-content: flex-end;
   margin-right: 20px;
+
+  margin-top: 50px;
 }
 
 .org-table{

@@ -1,7 +1,7 @@
 /* Container for the dashboard */
 .dashboard-container {
     text-align: center;
-    margin-top: 10px;
+    margin-top: 20px;
     font-family: Arial, sans-serif;
   }
   
@@ -41,6 +41,10 @@
   
   .dept-button:hover {
     background-color: #218838; /* Darker green on hover */
+  }
+
+  .filter-container{
+    margin-top: 30px;
   }
 
   .user-table{

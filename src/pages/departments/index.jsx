@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Table, Button, Spin, message } from "antd";
 import { CreateOrgDepModal } from "../../components/modals/dep-org-modal/index.jsx";
 import { api } from "../../common/interceptor/index.jsx";
-import { LogoutButton } from "../../components/buttons/logout/index.jsx";
+import {Header } from "../../components/buttons/header/index.jsx";
 import "./departments.css";
 
 export const Departments = () => {
@@ -62,9 +62,9 @@ export const Departments = () => {
 
   return (
     <>
-      <LogoutButton />
+      <Header />
       <div className="departments-page">
-        {/* Create Department Button */}
+        <h1>Departments</h1>
         <div className="create-dept-button-container">
           <Button type="primary" onClick={() => setIsModalOpen(true)}>
             Create Department

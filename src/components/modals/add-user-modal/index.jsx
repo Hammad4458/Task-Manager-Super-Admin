@@ -219,6 +219,7 @@ export const AddUserModal = ({
 
         {/* Show Manager Field Only If Role is "USER" */}
         {selectedRole === "USER" && (
+          
           <Form.Item
             name="managerId"
             label="Manager"

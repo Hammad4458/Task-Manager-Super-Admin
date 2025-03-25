@@ -11,5 +11,5 @@ export const PublicRoute = () => {
 
   if (token === null) return null; // Prevent flashing
 
-  return token ? <Navigate to="/" replace /> : <Outlet />;
+  return token ? <Navigate to="/superAdmin/dashboard" replace /> : <Outlet />;
 };
