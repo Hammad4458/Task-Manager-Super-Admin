@@ -55,5 +55,6 @@
     display: flex;
     justify-content: flex-end;
     margin-right: 50px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
   }

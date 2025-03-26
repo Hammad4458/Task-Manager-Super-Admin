@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Header} from "../../components/buttons/header/index";
+import { Header } from "../../components/buttons/header/index";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../components/context/index.jsx";
-import { Table, Button , Input , Cascader } from "antd";
+import { Table, Button, Input, Cascader } from "antd";
 import { api } from "../../common/interceptor/index";
 import { AddUserModal } from "../../components/modals/add-user-modal/index"; // Import modal
-
 import "./dashboard.css";
 
 export const SuperAdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [organizations,setOrganizations] = useState([]);
-  const [departments,setDepartments] = useState([]);
+  const [organizations, setOrganizations] = useState([]);
+  const [departments, setDepartments] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState({ role: null, organization: null, department: null });
+  const [filters, setFilters] = useState({
+    role: null,
+    organization: null,
+    department: null,
+  });
 
   const navigate = useNavigate();
   const { user } = useUser();
@@ -25,28 +28,28 @@ export const SuperAdminDashboard = () => {
   }, [filters, searchTerm]);
 
   const fetchAllUser = async () => {
-    const params = {
-      role: filters.role,
-      organization: filters.organization,
-      department: filters.department,
-      search: searchTerm || undefined, 
-    };
+    let params = Object.fromEntries(
+      Object.entries({
+        role: filters.role,
+        organization: filters.organization,
+        department: filters.department,
+        name: searchTerm || undefined,
+      }).filter(([_, v]) => v != null) //It removes the null values
+    );
+
+    
 
     try {
-      const response = await api.get("/users",{params});
+      const response = await api.get("/users?", { params });
       setUsers(response.data);
       const org = await api.get("/organization");
       setOrganizations(org.data);
-      console.log("org",organizations);
       const dep = await api.get("/department");
       setDepartments(dep.data);
-      console.log("org",departments);
     } catch (error) {
       console.error("Failed to fetch users:", error);
     }
   };
-
- 
 
   const openEditModal = (user) => {
     setSelectedUser(user);
@@ -62,17 +65,17 @@ export const SuperAdminDashboard = () => {
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Email", dataIndex: "email", key: "email" },
     { title: "Role", dataIndex: "role", key: "role" },
-    { 
-      title: "Department", 
-      dataIndex: "department", 
-      key: "department", 
-      render: (department) => department?.name || "N/A" 
+    {
+      title: "Department",
+      dataIndex: "department",
+      key: "department",
+      render: (department) => department?.name || "N/A",
     },
-    { 
-      title: "Organization", 
-      dataIndex: "organization", 
-      key: "organization", 
-      render: (organization) => organization?.name || "N/A" 
+    {
+      title: "Organization",
+      dataIndex: "organization",
+      key: "organization",
+      render: (organization) => organization?.name || "N/A",
     },
     {
       title: "Action",
@@ -90,18 +93,30 @@ export const SuperAdminDashboard = () => {
   };
 
   const handleFilterChange = (value, selectedOptions) => {
-    console.log(value[0],value[1],value[2],"edededede");
-    setFilters({
-      role: value[0] || null,
-      organization: value[1] || null,
-      department: value[2] || null,
-    });
-  };
+    // Ensure the values are mapped correctly based on category
+    const filterObj = {
+      role: null,
+      organization: null,
+      department: null,
+    };
 
+    selectedOptions?.forEach((option, index) => {
+      if (
+        option.value === "role" ||
+        option.value === "department" ||
+        option.value === "organization"
+      ) {
+        filterObj[option.value] = value[index + 1] || null;
+      }
+    });
+
+    
+    setFilters(filterObj);
+  };
 
   const cascaderOptions = [
     {
-      value: "role",
+      value:"role",
       label: "Role",
       children: [
         { value: "ADMIN", label: "Admin" },
@@ -110,38 +125,40 @@ export const SuperAdminDashboard = () => {
       ],
     },
     {
-      value: "department",
+      value:"department",
       label: "Department",
-      children:
-        departments.map((dep)=>({
-        value:dep.id,
-        label:dep.name,
+      children: departments.map((dep) => ({
+        value: dep.name,
+        label: dep.name,
       })),
     },
     {
-      value: "organization",
+      value:"organization",
       label: "Organization",
-      children:
-         organizations.map((org)=>({
-        value:org.id,
-        label:org.name,
-         
+      children: organizations.map((org) => ({
+        value: org.name,
+        label: org.name,
       })),
-    
-    }
+    },
   ];
 
   return (
     <>
       <Header />
-      
+
       <div className="dashboard-container">
         <h1>Main Page</h1>
         <div className="button-container">
-          <button onClick={() => navigate("/superAdmin/organization")} className="org-button">
+          <button
+            onClick={() => navigate("/superAdmin/organization")}
+            className="org-button"
+          >
             Organizations
           </button>
-          <button onClick={() => navigate("/superAdmin/department")} className="dept-button">
+          <button
+            onClick={() => navigate("/superAdmin/department")}
+            className="dept-button"
+          >
             Departments
           </button>
         </div>
@@ -167,20 +184,20 @@ export const SuperAdminDashboard = () => {
             Add User
           </Button>
         </div>
-        <Table 
-          dataSource={users} 
+        <Table
+          dataSource={users}
           columns={columns}
-          pagination={{ pageSize: 5, position: ["bottomCenter"] }} 
-          rowKey={(record) => record.id} 
+          pagination={{ pageSize: 5, position: ["bottomCenter"] }}
+          rowKey={(record) => record.id}
           className="user-table"
         />
 
-        <AddUserModal 
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)} 
-          onUserAdded={fetchAllUser} 
-          onUserUpdated={fetchAllUser} 
-          userToEdit={selectedUser} 
+        <AddUserModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onUserAdded={fetchAllUser}
+          onUserUpdated={fetchAllUser}
+          userToEdit={selectedUser}
         />
       </div>
     </>

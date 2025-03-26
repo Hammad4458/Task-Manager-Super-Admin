@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { Button, Radio } from "antd";
 import 'antd/dist/reset.css';
 import { z } from "zod";
-import { useState } from "react";
 import "./login.css"; 
 
 const loginSchema = z.object({
@@ -15,7 +14,6 @@ const loginSchema = z.object({
 });
 
 export const Login = () => {
-  const [userType, setUserType] = useState("user"); // Default to "user"
   
   const {
     register,
@@ -29,22 +27,21 @@ export const Login = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log("Submitting Data:", data); // Debugging: Check if data is logged
+    
     try {
      
       
       const response = await api.post("/super-admin/login", data);
   
-      console.log("Response:", response); // Debugging: Check the response from the server
+      
   
       if (response.data?.user) {
-        console.log("User Data:", response.data.user); // Debugging: Check user data
+        
         setUser(response.data.user);
-        localStorage.setItem("userType", userType);
-       
+        
         navigate("/superAdmin/Dashboard");
       } else {
-        console.log("User not found or invalid credentials");
+       
       }
     } catch (error) {
       console.error("Server Side Error", error); 
@@ -57,7 +54,7 @@ export const Login = () => {
         <h2 className="login-title">Login</h2>
         <form
           onSubmit={handleSubmit((data) => {
-            console.log("Form Submitted with:", data); 
+            
             onSubmit(data);
           })}
           className="login-form"

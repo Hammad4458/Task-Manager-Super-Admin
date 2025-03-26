@@ -14,10 +14,10 @@ export const CreateOrgDepModal = ({
   const [form] = Form.useForm();
   const [organizations, setOrganizations] = useState([]);
   const {user}=useUser();
-  const superAdminId = user.id;
-  console.log(superAdminId);
+  const superAdminId = user?.id;
+  
 
-  console.log("Modal:",user);
+
 
   useEffect(() => {
     if (type === "department") {
@@ -29,7 +29,7 @@ export const CreateOrgDepModal = ({
     try {
       const response = await api.get("/organization");
       setOrganizations(response.data);
-      console.log(organizations);
+      
     } catch (error) {
       message.error("Failed to fetch organizations!");
     }
@@ -42,7 +42,7 @@ export const CreateOrgDepModal = ({
       if (type === "department") {
         data.organizations = values.organizations; // Include assigned organizations
       }
-      console.log(data);
+      
 
       const endpoint =
         type === "organization" ? "/organization/create" : "/department/create";
