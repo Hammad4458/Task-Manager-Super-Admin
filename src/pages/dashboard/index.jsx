@@ -150,13 +150,13 @@ export const SuperAdminDashboard = () => {
         <h1>Main Page</h1>
         <div className="button-container">
           <button
-            onClick={() => navigate("/superAdmin/organization")}
+            onClick={() => navigate("/dashboard/organization")}
             className="org-button"
           >
             Organizations
           </button>
           <button
-            onClick={() => navigate("/superAdmin/department")}
+            onClick={() => navigate("/dashboard/department")}
             className="dept-button"
           >
             Departments

@@ -26,9 +26,9 @@ root.render(
           </Route>
 
           <Route element={<PrivateRoute />}>
-          <Route path="/superAdmin/dashboard" element={<SuperAdminDashboard />} />
-          <Route path="/superAdmin/organization" element={<Organizations />} />
-          <Route path="/superAdmin/department" element={<Departments />} />
+          <Route path="/dashboard" element={<SuperAdminDashboard />} />
+          <Route path="/dashboard/organization" element={<Organizations />} />
+          <Route path="/dashboard/department" element={<Departments />} />
           </Route>
         </Routes>
       </UserProvider>

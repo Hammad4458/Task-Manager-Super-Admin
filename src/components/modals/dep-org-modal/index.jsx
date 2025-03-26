@@ -39,11 +39,6 @@ export const CreateOrgDepModal = ({
     try {
       let data = { name: values.name ,superAdmin: superAdminId };
 
-      if (type === "department") {
-        data.organizations = values.organizations; // Include assigned organizations
-      }
-      
-
       const endpoint =
         type === "organization" ? "/organization/create" : "/department/create";
       const response = await api.post(endpoint, data);
@@ -75,28 +70,6 @@ export const CreateOrgDepModal = ({
         >
           <Input placeholder={`Enter ${type} name`} />
         </Form.Item>
-
-        {/* Assign Organization - Only for Departments */}
-        {type === "department" && (
-          <Form.Item
-            label="Assign Organization"
-            name="organizations"
-            rules={[
-              {
-                required: true,
-                message: "Please select at least one organization",
-              },
-            ]}
-          >
-            <Select mode="multiple" placeholder="Select organizations">
-              {organizations.map((org) => (
-                <Option key={org.id} value={org.id}>
-                  {org.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        )}
 
         <Form.Item>
           <Button type="primary" htmlType="submit">

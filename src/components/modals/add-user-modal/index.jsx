@@ -144,6 +144,11 @@ export const AddUserModal = ({
       open={isOpen}
       onCancel={onClose}
       footer={null}
+      modalRender={(modal) => (
+        <div style={{ maxHeight: "75vh", borderRadius: "8px",background:"white", overflowY: "auto" }}>
+          {modal}
+        </div>
+      )}
     >
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.Item

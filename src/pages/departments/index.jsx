@@ -45,12 +45,7 @@ export const Departments = () => {
           ? organizations.map((org) => org.name).join(", ")
           : "No organizations assigned",
     },
-    {
-      title: "SuperAdmin",
-      dataIndex: ["superAdmin", "name"],
-      key: "superAdmin",
-      render: (superAdmin) => superAdmin || "No SuperAdmin assigned",
-    },
+   
     {
       title: "Users",
       dataIndex: "users",
@@ -79,7 +74,6 @@ export const Departments = () => {
           onEntityCreated={handleDepartmentCreated}
         />
 
-        {/* Ant Design Table */}
         {loading ? (
           <div className="loading-container">
             <Spin size="large" />

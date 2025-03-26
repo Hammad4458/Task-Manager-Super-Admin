@@ -3,12 +3,18 @@ import { Table, Button, Spin, message } from "antd";
 import { CreateOrgDepModal } from "../../components/modals/dep-org-modal/index.jsx";
 import { Header } from "../../components/buttons/header/index.jsx";
 import { api } from "../../common/interceptor/index.jsx";
+import { AssignDepartmentModal } from "../../components/modals/assign-department-modal/index.jsx";
 import "./organization.css";
 
 export const Organizations = () => {
   const [organizations, setOrganizations] = useState([]);
+  const [orgId, setOrgId] = useState(null);
+  const [assignModal, setAssignModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDepartments, setSelectedDepartments] = useState([]); 
+  const [isUpdateMode, setIsUpdateMode] = useState(false); 
+
 
   useEffect(() => {
     fetchOrganizations();
@@ -30,6 +36,18 @@ export const Organizations = () => {
     setOrganizations([...organizations, newOrg]);
   };
 
+  const handleAssign = (id) => {
+    setOrgId(id); // Ensure only the ID is stored
+    setAssignModal(true);
+  };
+
+  const handleUpdate = (id, assignedDepartments) => {
+    setOrgId(id);
+    setSelectedDepartments(assignedDepartments.map(dep => dep.id)); // Preload selected departments
+    setAssignModal(true);
+    setIsUpdateMode(true);
+  };
+
   const columns = [
     {
       title: "Organization Name",
@@ -46,20 +64,31 @@ export const Organizations = () => {
           : "No departments assigned",
     },
     {
-      title: "SuperAdmin",
-      dataIndex: "superAdmins",
-      key: "superAdmins",
-      render: (superAdmins) =>
-        superAdmins?.length > 0
-          ? superAdmins.map((admin) => admin.name).join(", ")
-          : "No superAdmins assigned",
-    },
-    {
       title: "Users",
       dataIndex: "users",
       key: "users",
       render: (users) =>
-        users?.length > 0 ? users.map((user) => user.name).join(", ") : "No users assigned",
+        users?.length > 0
+          ? users.map((user) => user.name).join(", ")
+          : "No users assigned",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: (_, record) => (
+        <>
+          <Button type="primary" onClick={() => handleAssign(record.id)}>
+            Assign
+          </Button>
+          <Button
+            type="default"
+            style={{ marginLeft: 8 }}
+            onClick={() => handleUpdate(record.id, record.departments)}
+          >
+            Update
+          </Button>
+        </>
+      ),
     },
   ];
 
@@ -98,6 +127,17 @@ export const Organizations = () => {
           />
         )}
       </div>
+
+      {assignModal && (
+      <AssignDepartmentModal
+        isOpen={assignModal}
+        onClose={() => setAssignModal(false)}
+        organizationId={orgId}
+        selectedDepartments={selectedDepartments}
+        isUpdateMode={isUpdateMode}
+        onEntityUpdated={fetchOrganizations}
+      />
+    )}
     </>
   );
 };

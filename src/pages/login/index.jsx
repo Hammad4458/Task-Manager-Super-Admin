@@ -39,7 +39,7 @@ export const Login = () => {
         
         setUser(response.data.user);
         
-        navigate("/superAdmin/Dashboard");
+        navigate("/dashboard");
       } else {
        
       }
