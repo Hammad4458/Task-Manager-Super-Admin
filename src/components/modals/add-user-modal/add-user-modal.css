@@ -1,0 +1,13 @@
+.add-user-modal .ant-modal-title {
+    text-align: center;
+    width: 100%;
+    color: rgb(2, 78, 2);
+  }
+
+  .modal-scroller {
+    max-height: 75vh;
+    border-radius: 8px;
+    background: white;
+    overflow-y: auto;
+  }
+  

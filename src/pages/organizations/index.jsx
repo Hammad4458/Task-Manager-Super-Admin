@@ -63,33 +63,40 @@ export const Organizations = () => {
           ? departments.map((dep) => dep.name).join(", ")
           : "No departments assigned",
     },
-    {
-      title: "Users",
-      dataIndex: "users",
-      key: "users",
-      render: (users) =>
-        users?.length > 0
-          ? users.map((user) => user.name).join(", ")
-          : "No users assigned",
+      {
+    title: "Users",
+    dataIndex: "departments",  // Fetching users from departments
+    key: "users",
+    render: (departments) => {
+      if (!departments || departments.length === 0) {
+        return "No users assigned";
+      }
+
+      // Extract users from all departments and remove duplicates
+      const users = [
+        ...new Set(departments.flatMap((dep) => dep.users?.map(user => user.name) || []))
+      ];
+
+      return users.length > 0 ? users.join(", ") : "No users assigned";
     },
-    {
-      title: "Action",
-      dataIndex: "action",
-      render: (_, record) => (
-        <>
-          <Button type="primary" onClick={() => handleAssign(record.id)}>
-            Assign
-          </Button>
-          <Button
-            type="default"
-            style={{ marginLeft: 8 }}
-            onClick={() => handleUpdate(record.id, record.departments)}
-          >
-            Update
-          </Button>
-        </>
-      ),
-    },
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    render: (_, record) => (
+      <div className="org-action" >
+        <Button type="primary" onClick={() => handleAssign(record.id)}>
+          Assign
+        </Button>
+        <Button
+          type="default"
+          onClick={() => handleUpdate(record.id, record.departments)}
+        >
+          Update
+        </Button>
+      </div>
+    ),
+  }
   ];
 
   return (

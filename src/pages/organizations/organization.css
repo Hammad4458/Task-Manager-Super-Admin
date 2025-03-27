@@ -14,3 +14,8 @@
 .org-table{
   margin: 40px;
 }
+
+.org-action{
+  display:flex;
+  gap: 8px;
+}

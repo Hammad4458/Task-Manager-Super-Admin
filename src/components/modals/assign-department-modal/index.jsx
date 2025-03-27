@@ -42,6 +42,8 @@ export const AssignDepartmentModal = ({
         return;
       }
 
+      console.log(orgId,departments,"---")
+
       const url = isUpdateMode
         ? `/organization/${orgId}/update-departments`
         : `/organization/${orgId}/assign-departments`;

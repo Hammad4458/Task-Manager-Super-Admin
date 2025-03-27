@@ -37,8 +37,6 @@ export const SuperAdminDashboard = () => {
       }).filter(([_, v]) => v != null) //It removes the null values
     );
 
-    
-
     try {
       const response = await api.get("/users?", { params });
       setUsers(response.data);
@@ -92,31 +90,25 @@ export const SuperAdminDashboard = () => {
     setSearchTerm(e.target.value);
   };
 
-  const handleFilterChange = (value, selectedOptions) => {
-    // Ensure the values are mapped correctly based on category
+  const handleFilterChange = (values) => {
     const filterObj = {
       role: null,
       organization: null,
       department: null,
     };
-
-    selectedOptions?.forEach((option, index) => {
-      if (
-        option.value === "role" ||
-        option.value === "department" ||
-        option.value === "organization"
-      ) {
-        filterObj[option.value] = value[index + 1] || null;
+  
+    values.forEach(([category, selectedValue]) => {
+      if (category in filterObj) {
+        filterObj[category] = selectedValue;
       }
     });
-
-    
+  
     setFilters(filterObj);
   };
-
+  
   const cascaderOptions = [
     {
-      value:"role",
+      value: "role",
       label: "Role",
       children: [
         { value: "ADMIN", label: "Admin" },
@@ -125,7 +117,7 @@ export const SuperAdminDashboard = () => {
       ],
     },
     {
-      value:"department",
+      value: "department",
       label: "Department",
       children: departments.map((dep) => ({
         value: dep.name,
@@ -133,7 +125,7 @@ export const SuperAdminDashboard = () => {
       })),
     },
     {
-      value:"organization",
+      value: "organization",
       label: "Organization",
       children: organizations.map((org) => ({
         value: org.name,
@@ -176,6 +168,8 @@ export const SuperAdminDashboard = () => {
             onChange={handleFilterChange}
             placeholder="Filter by Role, Organization, Department"
             style={{ width: 300 }}
+            multiple // Enable selecting multiple categories
+            maxTagCount="responsive"
           />
         </div>
 

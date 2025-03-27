@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Input, Select, Form, message } from "antd";
 import { api } from "../../../common/interceptor/index";
+import "./add-user-modal.css"
 
 const { Option } = Select;
 
@@ -36,7 +37,7 @@ export const AddUserModal = ({
             email: userToEdit.email || "",
             role: userToEdit.role || "",
             organizationId: userToEdit.organization?.id || undefined,
-            departmentId: userToEdit.department?.id || undefined,
+            departmentId: userToEdit.department?.name || undefined,
             managerId: userToEdit.manager?.id || undefined,
           });
   
@@ -128,8 +129,8 @@ export const AddUserModal = ({
         onUserAdded();
       }
 
-    //  form.resetFields();
-     // onClose();
+     form.resetFields();
+     onClose();
     } catch (error) {
       message.error("Failed to save user.");
       console.error("Error saving user:", error);
@@ -140,12 +141,13 @@ export const AddUserModal = ({
 
   return (
     <Modal
+    className="add-user-modal"
       title={userToEdit ? "Edit User" : "Add User"}
       open={isOpen}
       onCancel={onClose}
       footer={null}
       modalRender={(modal) => (
-        <div style={{ maxHeight: "75vh", borderRadius: "8px",background:"white", overflowY: "auto" }}>
+        <div className="modal-scroller" >
           {modal}
         </div>
       )}

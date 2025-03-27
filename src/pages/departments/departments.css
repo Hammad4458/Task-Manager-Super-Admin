@@ -14,3 +14,8 @@
 .dep-table{
   margin: 40px;
 }
+
+.dep-action{
+  display:flex;
+  gap: 8px;
+}
