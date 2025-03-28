@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Table, Button, Spin, message } from "antd";
 import { CreateOrgDepModal } from "../../components/modals/dep-org-modal/index.jsx";
 import { api } from "../../common/interceptor/index.jsx";
-import {Header } from "../../components/buttons/header/index.jsx";
+import { Header } from "../../components/buttons/header/index.jsx";
+import { UpdateNameModal } from "../../components/modals/change-name-modal/index.jsx";
 import { useTranslation } from "react-i18next";
 import "./departments.css";
 
@@ -10,7 +11,9 @@ export const Departments = () => {
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const {t} = useTranslation()
+  const [nameModal,setNameModal] = useState(false);
+  const [selectItem,setSelectedItem] = useState({})
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchDepartments();
@@ -32,6 +35,15 @@ export const Departments = () => {
     setDepartments([...departments, newDep]);
   };
 
+  const handleName = (depId, depName) => {
+    setSelectedItem(() => {
+      const newItem = { id: depId, name: depName };
+      console.log(newItem, "Updated selectedItem"); // Logs the new value immediately
+      return newItem;
+    });
+    setNameModal(true);
+  };
+
   const columns = [
     {
       title: "Department",
@@ -47,14 +59,27 @@ export const Departments = () => {
           ? organizations.map((org) => org.name).join(", ")
           : "No organizations assigned",
     },
-   
+
     {
       title: "Users",
       dataIndex: "users",
       key: "users",
       render: (users) =>
-        users?.length > 0 ? users.map((user) => user.name).join(", ") : "No users assigned",
+        users?.length > 0
+          ? users.map((user) => user.name).join(", ")
+          : "No users assigned",
     },
+    {
+          title: "Action",
+          dataIndex: "action",
+          render: (_, record) => (
+            <div className="dep-action">
+              <Button type="default" onClick={() => handleName(record.id,record.name)}>
+                {t("Update")}
+              </Button>
+            </div>
+          ),
+        },
   ];
 
   return (
@@ -87,10 +112,20 @@ export const Departments = () => {
             rowKey="id"
             bordered
             className="dep-table"
-            pagination={{ pageSize: 5, position: ["bottomCenter"] }} 
+            pagination={{ pageSize: 5, position: ["bottomCenter"] }}
           />
         )}
       </div>
+
+      {nameModal && (
+        <UpdateNameModal
+          isOpen={nameModal}
+          onClose={() => setNameModal(false)}
+          entityId={selectItem.id}
+          entityType="department"
+          currentName={selectItem.name}
+        />
+      )} 
     </>
   );
 };

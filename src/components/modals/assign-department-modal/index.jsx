@@ -1,28 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Input, Form, Select, message } from "antd";
+import { Modal, Button, Form, Select, message } from "antd";
 import { useTranslation } from "react-i18next";
 import { api } from "../../../common/interceptor/index";
 
 const { Option } = Select;
 
-export const AssignDepartmentModal = ({
-  isOpen,
-  onClose,
-  organizationId,
-  selectedDepartments = [],
-  isUpdateMode = false,
-  onEntityUpdated,
-}) => {
+export const AssignDepartmentModal = ({ isOpen, onClose, organizationId, assignedDepartments, onEntityUpdated }) => {
   const [form] = Form.useForm();
   const [departments, setDepartments] = useState([]);
-  const {t} = useTranslation()
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchDepartments();
-    if (isUpdateMode) {
-      form.setFieldsValue({ departments: selectedDepartments });
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      form.setFieldsValue({ departments: assignedDepartments });
     }
-  }, [isUpdateMode, selectedDepartments]);
+  }, [isOpen, assignedDepartments, form]);
 
   const fetchDepartments = async () => {
     try {
@@ -35,43 +31,24 @@ export const AssignDepartmentModal = ({
 
   const handleSubmit = async (values) => {
     try {
-      const { departments } = values;
-      const orgId = organizationId;
-
-      if (!orgId) {
+      if (!organizationId) {
         message.error("Please select an organization first!");
         return;
       }
 
-      console.log(orgId,departments,"---")
+      await api.put(`/organization/${organizationId}/update-departments`, { departmentIds: values.departments });
 
-      const url = isUpdateMode
-        ? `/organization/${orgId}/update-departments`
-        : `/organization/${orgId}/assign-departments`;
-
-      const method = isUpdateMode ? "put" : "post";
-
-      await api[method](url, { departmentIds: departments });
-
-      message.success(
-        isUpdateMode ? "Departments updated successfully!" : "Departments assigned successfully!"
-      );
-      
-      onEntityUpdated(); // Refresh data
+      message.success("Departments assigned/updated successfully!");
+      onEntityUpdated();
       form.resetFields();
       onClose();
     } catch (error) {
-      message.error(isUpdateMode ? "Failed to update departments!" : "Failed to assign departments!");
+      message.error("Failed to update departments!");
     }
   };
 
   return (
-    <Modal
-      title={isUpdateMode ? "Update Departments" : "Assign Departments"}
-      open={isOpen}
-      onCancel={onClose}
-      footer={null}
-    >
+    <Modal title="Assign Departments" open={isOpen} onCancel={onClose} footer={null}>
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.Item label={t("dep")} name="departments">
           <Select mode="multiple" placeholder="Select Departments">
@@ -85,11 +62,10 @@ export const AssignDepartmentModal = ({
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            {isUpdateMode ? "update" : "Assign"}
+            Assign
           </Button>
         </Form.Item>
       </Form>
     </Modal>
   );
 };
-

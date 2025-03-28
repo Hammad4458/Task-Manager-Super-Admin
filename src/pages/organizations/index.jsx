@@ -4,19 +4,18 @@ import { CreateOrgDepModal } from "../../components/modals/dep-org-modal/index.j
 import { Header } from "../../components/buttons/header/index.jsx";
 import { api } from "../../common/interceptor/index.jsx";
 import { AssignDepartmentModal } from "../../components/modals/assign-department-modal/index.jsx";
+import { UpdateNameModal } from "../../components/modals/change-name-modal/index.jsx";
 import { useTranslation } from "react-i18next";
 import "./organization.css";
 
 export const Organizations = () => {
   const [organizations, setOrganizations] = useState([]);
   const [orgId, setOrgId] = useState(null);
+  const [assignedDepartments, setAssignedDepartments] = useState([]);
   const [assignModal, setAssignModal] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDepartments, setSelectedDepartments] = useState([]); 
-  const [isUpdateMode, setIsUpdateMode] = useState(false); 
-  const {t} = useTranslation()
-
+  const [nameModal,setNameModal] = useState(false);
+  const [selectItem,setSelectedItem] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchOrganizations();
@@ -27,28 +26,29 @@ export const Organizations = () => {
       const response = await api.get("/organization");
       setOrganizations(response.data);
     } catch (error) {
-      console.error("Failed to fetch organizations:", error);
       message.error("Failed to load organizations.");
-    } finally {
-      setLoading(false);
     }
+  };
+
+  const handleAssign = (id, departments = []) => {
+    setOrgId(id);
+    setAssignedDepartments(departments.map((dep) => dep.id)); // Store assigned department IDs
+    setAssignModal(true);
   };
 
   const handleOrganizationCreated = (newOrg) => {
     setOrganizations([...organizations, newOrg]);
   };
 
-  const handleAssign = (id) => {
-    setOrgId(id); // Ensure only the ID is stored
-    setAssignModal(true);
+  const handleName = (depId, depName) => {
+    setSelectedItem(() => {
+      const newItem = { id: depId, name: depName };
+      console.log(newItem, "Updated selectedItem"); // Logs the new value immediately
+      return newItem;
+    });
+    setNameModal(true);
   };
-
-  const handleUpdate = (id, assignedDepartments) => {
-    setOrgId(id);
-    setSelectedDepartments(assignedDepartments.map(dep => dep.id)); // Preload selected departments
-    setAssignModal(true);
-    setIsUpdateMode(true);
-  };
+  
 
   const columns = [
     {
@@ -65,88 +65,78 @@ export const Organizations = () => {
           ? departments.map((dep) => dep.name).join(", ")
           : "No departments assigned",
     },
-      {
-    title: "Users",
-    dataIndex: "departments",  // Fetching users from departments
-    key: "users",
-    render: (departments) => {
-      if (!departments || departments.length === 0) {
-        return "No users assigned";
-      }
-
-      // Extract users from all departments and remove duplicates
-      const users = [
-        ...new Set(departments.flatMap((dep) => dep.users?.map(user => user.name) || []))
-      ];
-
-      return users.length > 0 ? users.join(", ") : "No users assigned";
+    {
+      title: "Users",
+      dataIndex: "departments",
+      key: "users",
+      render: (departments) => {
+        if (!departments || departments.length === 0) {
+          return "No users assigned";
+        }
+        const users = [
+          ...new Set(departments.flatMap((dep) => dep.users?.map((user) => user.name) || [])),
+        ];
+        return users.length > 0 ? users.join(", ") : "No users assigned";
+      },
     },
-  },
-  {
-    title: "Action",
-    dataIndex: "action",
-    render: (_, record) => (
-      <div className="org-action" >
-        <Button type="primary" onClick={() => handleAssign(record.id)}>
-          {t("assign")}
-        </Button>
-        <Button
-          type="default"
-          onClick={() => handleUpdate(record.id, record.departments)}
-        >
-          {t("Update")}
-        </Button>
-      </div>
-    ),
-  }
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: (_, record) => (
+        <div className="org-action">
+          <Button type="primary" onClick={() => handleAssign(record.id, record.departments)}>
+            {t("assign")}
+          </Button>
+          <Button type="default" onClick={() => handleName(record.id,record.name)}>
+            {t("Update")}
+          </Button>
+        </div>
+      ),
+    },
   ];
 
   return (
     <>
       <Header />
       <div className="organizations-page">
-        <h1>Organizations</h1>
+        <h1>{t("org")}</h1>
         <div className="create-org-button-container">
-          <Button type="primary" onClick={() => setIsModalOpen(true)}>
+          <Button type="primary" onClick={() => setAssignModal(true)}>
             Create Organization
           </Button>
         </div>
 
-        {/* Reusable Modal for Creating Organizations */}
-        <CreateOrgDepModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          type="organization"
-          onEntityCreated={handleOrganizationCreated}
-        />
+        <CreateOrgDepModal isOpen={assignModal} onClose={() => setAssignModal(false)} type="organization" onEntityCreated={handleOrganizationCreated} />
 
-        {/* Ant Design Table */}
-        {loading ? (
+        {organizations.length === 0 ? (
           <div className="loading-container">
             <Spin size="large" />
           </div>
         ) : (
-          <Table
-            dataSource={organizations}
-            columns={columns}
-            rowKey="id"
-            bordered
-            pagination={{ pageSize: 5, position: ["bottomCenter"] }}
-            className="org-table"
-          />
+          <Table dataSource={organizations} columns={columns} rowKey="id" bordered pagination={{ pageSize: 5, position: ["bottomCenter"] }} className="org-table" />
         )}
       </div>
 
       {assignModal && (
-      <AssignDepartmentModal
-        isOpen={assignModal}
-        onClose={() => setAssignModal(false)}
-        organizationId={orgId}
-        selectedDepartments={selectedDepartments}
-        isUpdateMode={isUpdateMode}
-        onEntityUpdated={fetchOrganizations}
-      />
-    )}
+        <AssignDepartmentModal
+          isOpen={assignModal}
+          onClose={() => setAssignModal(false)}
+          organizationId={orgId}
+          assignedDepartments={assignedDepartments} // Pass assigned departments
+          onEntityUpdated={fetchOrganizations}
+        />
+      )}
+
+      {nameModal && (
+        <UpdateNameModal 
+        isOpen={nameModal}
+        onClose={()=>setNameModal(false)}
+        entityId={selectItem?.id}
+        entityType="organization"
+        currentName={selectItem?.name}
+        
+        />
+      )}
     </>
   );
 };
