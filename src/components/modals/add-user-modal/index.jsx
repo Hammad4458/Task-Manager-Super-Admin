@@ -142,117 +142,109 @@ export const AddUserModal = ({
   return (
     <Modal
     className="add-user-modal"
-      title={userToEdit ? "Edit User" : "Add User"}
-      open={isOpen}
-      onCancel={onClose}
-      footer={null}
-      modalRender={(modal) => (
-        <div className="modal-scroller" >
-          {modal}
-        </div>
-      )}
-    >
+    title={userToEdit ? "Edit User" : "Add User"}
+    open={isOpen}
+    onCancel={onClose}
+    footer={null}
+    modalRender={(modal) => (
+      <div className="modal-wrapper">
+        {modal}
+      </div>
+    )}
+  >
+    <div className="modal-content">
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
-        <Form.Item
-          name="name"
-          label="Name"
-          rules={[{ required: true, message: "Please enter name" }]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          name="email"
-          label="Email"
-          rules={[
-            { required: true, type: "email", message: "Enter a valid email" },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        {!userToEdit && (
+        {/* Scrollable Body */}
+        <div className="modal-body">
           <Form.Item
-            name="password"
-            label="Password"
-            rules={[{ required: true, message: "Please enter a password" }]}
+            name="name"
+            label="Name"
+            rules={[{ required: true, message: "Please enter name" }]}
           >
-            <Input.Password />
+            <Input />
           </Form.Item>
-        )}
-
-        <Form.Item name="role" label="Role" rules={[{ required: true }]}>
-          <Select onChange={handleRoleChange}>
-            <Option value="ADMIN">Admin</Option>
-            <Option value="MANAGER">Manager</Option>
-            <Option value="USER">User</Option>
-          </Select>
-        </Form.Item>
-
-        {/* Organization Select */}
-        <Form.Item
-          name="organizationId"
-          label="Organization"
-          rules={[{ required: true, message: "Select an organization" }]}
-        >
-          <Select
-            onChange={handleOrganizationChange}
-            placeholder="Select Organization"
-          >
-            {organizations.map((org) => (
-              <Option key={org.id} value={org.id}>
-                {org.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-
-        {/* Department Select */}
-        <Form.Item
-          name="departmentId"
-          label="Department"
-          rules={[{ required: true, message: "Select a department" }]}
-        >
-          <Select
-            onChange={handleDepartmentChange}
-            placeholder="Select Department"
-          >
-            {filteredDepartments.map((dep) => (
-              <Option key={dep.id} value={dep.id}>
-                {dep.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-
-        {/* Show Manager Field Only If Role is "USER" */}
-        {selectedRole === "USER" && (
-          
+  
           <Form.Item
-            name="managerId"
-            label="Manager"
-            rules={[{ required: true, message: "Select a manager" }]}
+            name="email"
+            label="Email"
+            rules={[{ required: true, type: "email", message: "Enter a valid email" }]}
           >
-            <Select placeholder="Select Manager">
-              {managers.map((manager) => (
-                <Option key={manager.id} value={manager.id}>
-                  {manager.name}
+            <Input />
+          </Form.Item>
+  
+          {!userToEdit && (
+            <Form.Item
+              name="password"
+              label="Password"
+              rules={[{ required: true, message: "Please enter a password" }]}
+            >
+              <Input.Password />
+            </Form.Item>
+          )}
+  
+          <Form.Item name="role" label="Role" rules={[{ required: true }]}>
+            <Select onChange={handleRoleChange}>
+              <Option value="ADMIN">Admin</Option>
+              <Option value="MANAGER">Manager</Option>
+              <Option value="USER">User</Option>
+            </Select>
+          </Form.Item>
+  
+          <Form.Item
+            name="organizationId"
+            label="Organization"
+            rules={[{ required: true, message: "Select an organization" }]}
+          >
+            <Select onChange={handleOrganizationChange} placeholder="Select Organization">
+              {organizations.map((org) => (
+                <Option key={org.id} value={org.id}>
+                  {org.name}
                 </Option>
               ))}
             </Select>
           </Form.Item>
-        )}
-
-        <Button
-          type="primary"
-          htmlType="submit"
-          loading={loading}
-          style={{ marginRight: "10px" }}
-        >
-          {userToEdit ? "Update User" : "Add User"}
-        </Button>
-        <Button onClick={onClose}>Cancel</Button>
+  
+          <Form.Item
+            name="departmentId"
+            label="Department"
+            rules={[{ required: true, message: "Select a department" }]}
+          >
+            <Select onChange={handleDepartmentChange} placeholder="Select Department">
+              {filteredDepartments.map((dep) => (
+                <Option key={dep.id} value={dep.id}>
+                  {dep.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+  
+          {selectedRole === "USER" && (
+            <Form.Item
+              name="managerId"
+              label="Manager"
+              rules={[{ required: true, message: "Select a manager" }]}
+            >
+              <Select placeholder="Select Manager">
+                {managers.map((manager) => (
+                  <Option key={manager.id} value={manager.id}>
+                    {manager.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          )}
+        </div>
+  
+        {/* Fixed Footer */}
+        <div className="modal-footer">
+          <Button type="primary" htmlType="submit" loading={loading} style={{ marginRight: "10px" }}>
+            {userToEdit ? "Update User" : "Add User"}
+          </Button>
+          <Button onClick={onClose}>Cancel</Button>
+        </div>
       </Form>
-    </Modal>
+    </div>
+  </Modal>
+  
   );
 };

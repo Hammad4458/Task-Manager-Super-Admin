@@ -1,13 +1,36 @@
-.add-user-modal .ant-modal-title {
-    text-align: center;
-    width: 100%;
-    color: rgb(2, 78, 2);
+.add-user-modal .ant-modal-content {
+    display: flex;
+    flex-direction: column;
+    height: 80vh; /* Adjust height as needed */
   }
-
-  .modal-scroller {
-    max-height: 75vh;
-    border-radius: 8px;
+  
+  .add-user-modal .ant-modal-header {
+    position: sticky;
+    top: 0;
     background: white;
+    z-index: 10;
+  }
+  
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+  }
+  
+  .modal-body {
+    flex-grow: 1;
     overflow-y: auto;
+    padding: 16px;
+    max-height: calc(80vh - 120px); /* Adjust based on header/footer height */
+  }
+  
+  .modal-footer {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 16px;
+    z-index: 10;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
   }
   

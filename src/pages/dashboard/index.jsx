@@ -5,6 +5,7 @@ import { useUser } from "../../components/context/index.jsx";
 import { Table, Button, Input, Cascader } from "antd";
 import { api } from "../../common/interceptor/index";
 import { AddUserModal } from "../../components/modals/add-user-modal/index"; // Import modal
+import { useTranslation } from "react-i18next";
 import "./dashboard.css";
 
 export const SuperAdminDashboard = () => {
@@ -22,6 +23,7 @@ export const SuperAdminDashboard = () => {
 
   const navigate = useNavigate();
   const { user } = useUser();
+  const {t} = useTranslation();
 
   useEffect(() => {
     fetchAllUser();
@@ -34,7 +36,7 @@ export const SuperAdminDashboard = () => {
         organization: filters.organization,
         department: filters.department,
         name: searchTerm || undefined,
-      }).filter(([_, v]) => v != null) //It removes the null values
+      }).filter(([_, v]) => v != null) 
     );
 
     try {
@@ -139,19 +141,19 @@ export const SuperAdminDashboard = () => {
       <Header />
 
       <div className="dashboard-container">
-        <h1>Main Page</h1>
+        <h1>{t("mainPage")}</h1>
         <div className="button-container">
           <button
             onClick={() => navigate("/dashboard/organization")}
             className="org-button"
           >
-            Organizations
+            {t("org")}
           </button>
           <button
             onClick={() => navigate("/dashboard/department")}
             className="dept-button"
           >
-            Departments
+            {t("dep")}
           </button>
         </div>
 

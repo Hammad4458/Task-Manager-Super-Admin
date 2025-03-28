@@ -12,6 +12,7 @@ import { SuperAdminDashboard } from "./pages/dashboard/index";
 import 'antd/dist/reset.css'; 
 import { Organizations } from "./pages/organizations/index";
 import { Departments } from "./pages/departments/index";
+import "./locales/il8n"
 import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
