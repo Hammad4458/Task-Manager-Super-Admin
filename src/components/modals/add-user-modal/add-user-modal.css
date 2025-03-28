@@ -1,7 +1,7 @@
 .add-user-modal .ant-modal-content {
     display: flex;
     flex-direction: column;
-    height: 80vh; /* Adjust height as needed */
+    height: 80vh;
   }
   
   .add-user-modal .ant-modal-header {
@@ -22,7 +22,7 @@
     flex-grow: 1;
     overflow-y: auto;
     padding: 16px;
-    max-height: calc(80vh - 120px); /* Adjust based on header/footer height */
+    max-height: calc(80vh - 120px); 
   }
   
   .modal-footer {

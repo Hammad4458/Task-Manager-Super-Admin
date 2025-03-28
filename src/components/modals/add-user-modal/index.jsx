@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Input, Select, Form, message } from "antd";
 import { api } from "../../../common/interceptor/index";
+import { useTranslation } from "react-i18next";
 import "./add-user-modal.css"
 
 const { Option } = Select;
@@ -19,6 +20,7 @@ export const AddUserModal = ({
   const [filteredDepartments, setFilteredDepartments] = useState([]);
   const [managers, setManagers] = useState([]);
   const [selectedRole, setSelectedRole] = useState(null);
+  const {t} = useTranslation()
   
 
   useEffect(() => {
@@ -166,7 +168,7 @@ export const AddUserModal = ({
   
           <Form.Item
             name="email"
-            label="Email"
+            label={t("email")}
             rules={[{ required: true, type: "email", message: "Enter a valid email" }]}
           >
             <Input />
@@ -175,7 +177,7 @@ export const AddUserModal = ({
           {!userToEdit && (
             <Form.Item
               name="password"
-              label="Password"
+              label={t("password")}
               rules={[{ required: true, message: "Please enter a password" }]}
             >
               <Input.Password />
@@ -184,15 +186,15 @@ export const AddUserModal = ({
   
           <Form.Item name="role" label="Role" rules={[{ required: true }]}>
             <Select onChange={handleRoleChange}>
-              <Option value="ADMIN">Admin</Option>
-              <Option value="MANAGER">Manager</Option>
-              <Option value="USER">User</Option>
+              <Option value="ADMIN">{t("admin")}</Option>
+              <Option value="MANAGER">{t("manager")}</Option>
+              <Option value="USER">{t("user")}</Option>
             </Select>
           </Form.Item>
   
           <Form.Item
             name="organizationId"
-            label="Organization"
+            label={t("org")}
             rules={[{ required: true, message: "Select an organization" }]}
           >
             <Select onChange={handleOrganizationChange} placeholder="Select Organization">
@@ -206,7 +208,7 @@ export const AddUserModal = ({
   
           <Form.Item
             name="departmentId"
-            label="Department"
+            label={t("dep")}
             rules={[{ required: true, message: "Select a department" }]}
           >
             <Select onChange={handleDepartmentChange} placeholder="Select Department">
@@ -221,7 +223,7 @@ export const AddUserModal = ({
           {selectedRole === "USER" && (
             <Form.Item
               name="managerId"
-              label="Manager"
+              label={t("manager")}
               rules={[{ required: true, message: "Select a manager" }]}
             >
               <Select placeholder="Select Manager">
@@ -240,7 +242,7 @@ export const AddUserModal = ({
           <Button type="primary" htmlType="submit" loading={loading} style={{ marginRight: "10px" }}>
             {userToEdit ? "Update User" : "Add User"}
           </Button>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>{t("cancel")}</Button>
         </div>
       </Form>
     </div>

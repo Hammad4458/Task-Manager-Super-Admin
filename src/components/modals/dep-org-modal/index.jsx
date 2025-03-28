@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button, Input, Form, Select, message } from "antd";
 import { useUser } from "../../context/index";
 import { api } from "../../../common/interceptor/index";
+import { useTranslation } from "react-i18next";
 
 const { Option } = Select;
 
@@ -15,6 +16,7 @@ export const CreateOrgDepModal = ({
   const [organizations, setOrganizations] = useState([]);
   const {user}=useUser();
   const superAdminId = user?.id;
+  const {t} =useTranslation();
   
 
 
@@ -73,7 +75,7 @@ export const CreateOrgDepModal = ({
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Create
+            {t("create")}
           </Button>
         </Form.Item>
       </Form>

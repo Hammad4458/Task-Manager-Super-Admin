@@ -4,6 +4,7 @@ import { CreateOrgDepModal } from "../../components/modals/dep-org-modal/index.j
 import { Header } from "../../components/buttons/header/index.jsx";
 import { api } from "../../common/interceptor/index.jsx";
 import { AssignDepartmentModal } from "../../components/modals/assign-department-modal/index.jsx";
+import { useTranslation } from "react-i18next";
 import "./organization.css";
 
 export const Organizations = () => {
@@ -14,6 +15,7 @@ export const Organizations = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDepartments, setSelectedDepartments] = useState([]); 
   const [isUpdateMode, setIsUpdateMode] = useState(false); 
+  const {t} = useTranslation()
 
 
   useEffect(() => {
@@ -86,13 +88,13 @@ export const Organizations = () => {
     render: (_, record) => (
       <div className="org-action" >
         <Button type="primary" onClick={() => handleAssign(record.id)}>
-          Assign
+          {t("assign")}
         </Button>
         <Button
           type="default"
           onClick={() => handleUpdate(record.id, record.departments)}
         >
-          Update
+          {t("Update")}
         </Button>
       </div>
     ),

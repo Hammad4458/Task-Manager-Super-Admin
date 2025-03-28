@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "../../common/interceptor/index";
 import { useUser } from "../../components/context/index";
 import { useNavigate } from "react-router-dom";
-import { Button, Radio } from "antd";
+import { useTranslation } from "react-i18next";
 import 'antd/dist/reset.css';
 import { z } from "zod";
 import "./login.css"; 
@@ -25,6 +25,7 @@ export const Login = () => {
 
   const { setUser } = useUser();
   const navigate = useNavigate();
+  const {t} = useTranslation();
 
   const onSubmit = async (data) => {
     
@@ -51,7 +52,7 @@ export const Login = () => {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2 className="login-title">Login</h2>
+        <h2 className="login-title">{t("login")}</h2>
         <form
           onSubmit={handleSubmit((data) => {
             
@@ -61,7 +62,7 @@ export const Login = () => {
         >
          
           <div className="form-group">
-            <label>Email</label>
+            <label>{t("email")}</label>
             <input
               type="email"
               {...register("email")}
@@ -73,7 +74,7 @@ export const Login = () => {
           </div>
 
           <div className="form-group">
-            <label>Password</label>
+            <label>{t("password")}</label>
             <input
               type="password"
               {...register("password")}
@@ -87,7 +88,7 @@ export const Login = () => {
           </div>
 
           <button type="submit" className="login-button">
-            Login
+            {t("login")}
           </button>
         </form>
       </div>

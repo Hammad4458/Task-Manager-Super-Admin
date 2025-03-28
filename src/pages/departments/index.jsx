@@ -3,12 +3,14 @@ import { Table, Button, Spin, message } from "antd";
 import { CreateOrgDepModal } from "../../components/modals/dep-org-modal/index.jsx";
 import { api } from "../../common/interceptor/index.jsx";
 import {Header } from "../../components/buttons/header/index.jsx";
+import { useTranslation } from "react-i18next";
 import "./departments.css";
 
 export const Departments = () => {
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const {t} = useTranslation()
 
   useEffect(() => {
     fetchDepartments();
@@ -59,10 +61,10 @@ export const Departments = () => {
     <>
       <Header />
       <div className="departments-page">
-        <h1>Departments</h1>
+        <h1>{t("dep")}</h1>
         <div className="create-dept-button-container">
           <Button type="primary" onClick={() => setIsModalOpen(true)}>
-            Create Department
+            {t("create-dep")}
           </Button>
         </div>
 

@@ -23,7 +23,7 @@ export const SuperAdminDashboard = () => {
 
   const navigate = useNavigate();
   const { user } = useUser();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchAllUser();
@@ -36,7 +36,7 @@ export const SuperAdminDashboard = () => {
         organization: filters.organization,
         department: filters.department,
         name: searchTerm || undefined,
-      }).filter(([_, v]) => v != null) 
+      }).filter(([_, v]) => v != null)
     );
 
     try {
@@ -62,19 +62,38 @@ export const SuperAdminDashboard = () => {
   };
 
   const columns = [
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Email", dataIndex: "email", key: "email" },
-    { title: "Role", dataIndex: "role", key: "role" },
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      sorter: (a, b) => a.name.localeCompare(b.name),
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      sorter: (a, b) => a.email.localeCompare(b.email),
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+      sorter: (a, b) => a.role.localeCompare(b.role),
+    },
     {
       title: "Department",
       dataIndex: "department",
       key: "department",
+      sorter: (a, b) =>
+        (a.department?.name || "").localeCompare(b.department?.name || ""),
       render: (department) => department?.name || "N/A",
     },
     {
       title: "Organization",
       dataIndex: "organization",
       key: "organization",
+      sorter: (a, b) =>
+        (a.organization?.name || "").localeCompare(b.organization?.name || ""),
       render: (organization) => organization?.name || "N/A",
     },
     {
@@ -82,7 +101,7 @@ export const SuperAdminDashboard = () => {
       key: "action",
       render: (_, record) => (
         <Button type="primary" onClick={() => openEditModal(record)}>
-          Edit
+          {t("edit")}
         </Button>
       ),
     },
@@ -94,20 +113,22 @@ export const SuperAdminDashboard = () => {
 
   const handleFilterChange = (values) => {
     const filterObj = {
-      role: null,
-      organization: null,
-      department: null,
+      role: [],
+      organization: [],
+      department: [],
     };
-  
+
     values.forEach(([category, selectedValue]) => {
       if (category in filterObj) {
         filterObj[category] = selectedValue;
       }
     });
-  
+
+
     setFilters(filterObj);
+    console.log(filterObj)
   };
-  
+
   const cascaderOptions = [
     {
       value: "role",
@@ -169,15 +190,16 @@ export const SuperAdminDashboard = () => {
             options={cascaderOptions}
             onChange={handleFilterChange}
             placeholder="Filter by Role, Organization, Department"
-            style={{ width: 300 }}
-            multiple // Enable selecting multiple categories
+            style={{ width: 800 }}
+            multiple
             maxTagCount="responsive"
+            showCheckedStrategy={Cascader.SHOW_CHILD}
           />
         </div>
 
         <div className="add-user-button">
           <Button type="primary" onClick={openAddModal}>
-            Add User
+            {t("add-user")}
           </Button>
         </div>
         <Table

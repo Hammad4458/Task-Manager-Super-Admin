@@ -1,17 +1,18 @@
-// src/components/LogoutButton.js
+
 import React from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import { Button } from "antd"; // Import Ant Design Button
-import { LogoutOutlined, ArrowLeftOutlined } from "@ant-design/icons"; // Import Logout Icon
-import "./header.css"; // Import CSS file
+import { Button } from "antd"; 
+import { LogoutOutlined, ArrowLeftOutlined } from "@ant-design/icons"; 
+import { useTranslation } from "react-i18next";
+import "./header.css"; 
 
 export const Header = () => {
   const navigate = useNavigate();
-
+  const {t} = useTranslation();
   const handleLogout = () => {
-    Cookies.remove("token"); // Remove token from cookies
-    navigate("/login", { replace: true }); // Redirect to login page
+    Cookies.remove("token"); 
+    navigate("/login", { replace: true }); 
   };
 
   return (
@@ -22,7 +23,7 @@ export const Header = () => {
         type="primary"
         onClick={() => navigate(-1)}
       >
-        Back
+        {t("back")}
       </Button>
       <Button
         type="primary"
@@ -31,7 +32,7 @@ export const Header = () => {
         className="logout-button"
         onClick={handleLogout}
       >
-        Logout
+        {t("logout")}
       </Button>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Input, Form, Select, message } from "antd";
-import { useUser } from "../../context/index";
+import { useTranslation } from "react-i18next";
 import { api } from "../../../common/interceptor/index";
 
 const { Option } = Select;
@@ -15,6 +15,7 @@ export const AssignDepartmentModal = ({
 }) => {
   const [form] = Form.useForm();
   const [departments, setDepartments] = useState([]);
+  const {t} = useTranslation()
 
   useEffect(() => {
     fetchDepartments();
@@ -72,7 +73,7 @@ export const AssignDepartmentModal = ({
       footer={null}
     >
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
-        <Form.Item label="Departments" name="departments">
+        <Form.Item label={t("dep")} name="departments">
           <Select mode="multiple" placeholder="Select Departments">
             {departments.map((dep) => (
               <Option key={dep.id} value={dep.id}>
@@ -84,7 +85,7 @@ export const AssignDepartmentModal = ({
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            {isUpdateMode ? "Update" : "Assign"}
+            {isUpdateMode ? "update" : "Assign"}
           </Button>
         </Form.Item>
       </Form>
