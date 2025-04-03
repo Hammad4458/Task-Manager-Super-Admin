@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { api } from "../../common/interceptor/index";
 import Cookies from "js-cookie";
 
@@ -19,7 +18,6 @@ export const UserProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [userType, setUserType] = useState(localStorage.getItem("userType"));
 
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -32,7 +30,6 @@ export const UserProvider = ({ children }) => {
           setLoading(false);
           return;
         }
-  
   
         const response = await api.get("/super-admin/me", { withCredentials: true });
   

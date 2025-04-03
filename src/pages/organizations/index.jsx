@@ -134,6 +134,7 @@ export const Organizations = () => {
         entityId={selectItem?.id}
         entityType="organization"
         currentName={selectItem?.name}
+        onEntityUpdated={fetchOrganizations}
         
         />
       )}

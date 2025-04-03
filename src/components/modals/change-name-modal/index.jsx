@@ -27,10 +27,12 @@ export const UpdateNameModal = ({ isOpen, onClose, entityId, entityType, current
 
       await api.put(endpoint, { name: values.name });
 
-      message.success(`${entityType} updated successfully!`);
-      onEntityUpdated(); 
-      form.resetFields();
+      message.success(`Updated successfully!`);
+      
       onClose();
+      form.resetFields();
+      onEntityUpdated(); 
+      
     } catch (error) {
       message.error(`Failed to update ${entityType}!`);
     }

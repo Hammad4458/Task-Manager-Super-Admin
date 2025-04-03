@@ -33,6 +33,7 @@ export const Departments = () => {
 
   const handleDepartmentCreated = (newDep) => {
     setDepartments([...departments, newDep]);
+    
   };
 
   const handleName = (depId, depName) => {
@@ -42,6 +43,7 @@ export const Departments = () => {
       return newItem;
     });
     setNameModal(true);
+    fetchDepartments();
   };
 
   const columns = [
@@ -77,6 +79,7 @@ export const Departments = () => {
               <Button type="default" onClick={() => handleName(record.id,record.name)}>
                 {t("Update")}
               </Button>
+              
             </div>
           ),
         },
@@ -124,6 +127,7 @@ export const Departments = () => {
           entityId={selectItem.id}
           entityType="department"
           currentName={selectItem.name}
+          onEntityUpdated={fetchDepartments}
         />
       )} 
     </>
